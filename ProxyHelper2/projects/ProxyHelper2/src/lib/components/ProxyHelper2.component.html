@@ -1,0 +1,15 @@
+<mat-card>
+    <mat-card-title>Welcome to ProxyHelper2</mat-card-title>
+    <mat-card-subtitle>Updated version of Kc57's ProxyHelper</mat-card-subtitle>
+    <mat-card-content>
+        This is probably going to be a hot mess for a while. 
+
+        <button mat-flat-button color="accent" (click)="doButtonPress();">Button Test</button>
+
+        <br/>
+        <span>The API response was: </span>
+        <br>
+        <mat-slide-toggle [(ngModel)]="isChecked" (change)="routingToggle()">Route to Proxy</mat-slide-toggle>
+        <br/>
+    </mat-card-content>
+</mat-card>
