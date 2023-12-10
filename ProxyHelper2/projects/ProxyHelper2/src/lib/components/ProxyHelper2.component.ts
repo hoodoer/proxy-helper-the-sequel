@@ -21,47 +21,69 @@ export class ProxyHelper2Component implements OnInit {
     proxyIpAddress = '';
     proxyPort      = '';
 
-    selectedPorts: string[] = ['80', '443'];
 
     ports = [
         { value: '80', checked: false },
         { value: '443', checked: true },
         ];
 
+    newPort: string = '';
 
-    doButtonPress(): void {
+    backups: string[] = [];
+
+
+    saveFirewallRules(): void {
         this.API.request({
             module: 'ProxyHelper2',
-            action: 'hello_world',
+            action: 'backupFirewall',
         }, (response) => {
             this.apiResponse = response;
-            console.log("PH2 got response from python: " + response);
+            console.log("Save firewall got response: " + response);
+            this.backups.push(response);
         })
     }
 
-    routingToggle(): void {
-        console.log("Routing toggle changed: " + this.isChecked);
-
-        console.log("About to proxy route: " + this.proxyIpAddress + ': ' + this.proxyPort);
-
-        this.API.request({
-            module: 'ProxyHelper2',
-            action: 'routingToggle',
-            toggleValue: this.isChecked
-        }, (response) => {
-            this.apiResponse = response;
-            console.log("Toggle: " + response);
-        })
+    deleteBackup(backup: string): void {
+        this.backups = this.backups.filter(i => i !== backup);
     }
 
 
-    getSelectedPorts(): string[] {
-        return this.ports.filter(port => port.checked).map(port => port.value);
+    restoreBackup(backup: string): void {
+        console.log("Would restore firewall backup: " + backup);
     }
 
 
-    ngOnInit() {
-    }
+
+    addNewPort(): void {
+        if (this.newPort && !this.ports.some(port => port.value === this.newPort)) {
+          this.ports.push({ value: this.newPort, checked: false });
+      this.newPort = ''; // Clear the input field after adding a new port
+  }
+}
+
+routingToggle(): void {
+    console.log("Routing toggle changed: " + this.isChecked);
+
+    console.log("About to proxy route: " + this.proxyIpAddress + ': ' + this.proxyPort);
+
+    this.API.request({
+        module: 'ProxyHelper2',
+        action: 'routingToggle',
+        toggleValue: this.isChecked
+    }, (response) => {
+        this.apiResponse = response;
+        console.log("Toggle: " + response);
+    })
+}
+
+
+getSelectedPorts(): string[] {
+    return this.ports.filter(port => port.checked).map(port => port.value);
+}
+
+
+ngOnInit() {
+}
 
 
 }

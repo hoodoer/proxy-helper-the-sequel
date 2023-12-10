@@ -7,24 +7,24 @@
         You'll need to configure your Burp Suite Proxy Listener to listen on all interfaces (not just Loopback only) and set it's Request handling to Support invisible proxying. <br><br>
         If you have an older pineapple using the older module development style, use the original ProxyHelper module here:<br>
         https://github.com/trustedsec/proxy_helper<br><br>
-        Contact me if you have issues:<br>
-        @hoodoer<br>
-        hoodoer@bitwisemunitions.dev
-
     </mat-card-content>
 </mat-card>
 
-<!-- <mat-card>
+<mat-card>
     <mat-card-content>
-        <button mat-flat-button color="accent" (click)="doButtonPress();">Button Test</button>
+        <b>Firewall Rules - Backup and Restore:</b><br><br>
+        <button mat-flat-button color="primary" (click)="saveFirewallRules();">Backup Firewall Rules</button>
+        <br>
+        <ul>
+          <li *ngFor="let backup of backups">
+            {{ backup }}
+            <button mat-flat-button color="warn" (click)="deleteBackup(backup)">Delete</button>
+            <button mat-flat-button color="accent" (click)="restoreBackup(backup)">Restore</button>
+        </li>
+    </ul>       
 
-        <br/>
-        <span>The API response was: </span>
-
-    </mat-card-content>
+</mat-card-content>
 </mat-card>
--->
-
 
 
 <mat-card>
@@ -32,7 +32,15 @@
         <b>Ports to forward to Burp Proxy:</b><br><br>
         <div *ngFor="let port of ports">
           <mat-checkbox [(ngModel)]="port.checked">{{ port.value }}</mat-checkbox>
-        </div>      
+      </div> 
+
+          <div>
+      <mat-form-field>
+        <input matInput [(ngModel)]="newPort" placeholder="New Port">
+      </mat-form-field>
+      <br>
+      <button mat-flat-button color="primary" (click)="addNewPort()">Add Port</button>
+    </div>     
   </mat-card-content>
 </mat-card>
 
@@ -51,5 +59,15 @@
         </mat-form-field>
         <br>
         <mat-slide-toggle [(ngModel)]="isChecked" (change)="routingToggle()">Route to Proxy</mat-slide-toggle>
+    </mat-card-content>
+</mat-card>
+
+
+<mat-card>
+    <mat-card-content>
+        <b><i>Contact Info</i></b><br><br>
+        If you're having issues feel free to contact me:<br>
+        @hoodoer<br>
+        hoodoer@bitwisemunitions.dev
     </mat-card-content>
 </mat-card>

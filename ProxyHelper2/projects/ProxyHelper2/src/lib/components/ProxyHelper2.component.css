@@ -23,3 +23,13 @@
 .mat-card {
   margin-bottom: 10px; /* Adjust the value to set the desired bottom margin */
 }
+
+
+
+
+.mat-flat-button {
+  height: 28px; /* Adjust the height to make the buttons smaller vertically */
+  margin-right: 8px; /* Add spacing to the right of each button */
+  margin-bottom: 8px; /* Add spacing below each button */
+  align-items: center;
+}

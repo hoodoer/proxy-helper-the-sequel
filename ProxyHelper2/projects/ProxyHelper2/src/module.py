@@ -3,6 +3,7 @@
 import logging
 import os
 import pathlib
+from datetime import datetime
 
 from pineapple.modules import Module, Request
 
@@ -19,6 +20,18 @@ def routingToggle(request: Request):
 		return 'Oh boy!'
 	else:
 		return 'nope'
+
+@module.handles_action('backupFirewall')
+def backupFirewall(request: Request):
+	current_time = datetime.now()
+	formatted_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
+	fileName = 'iptables_' + formatted_time;
+
+	# save the stuffs....
+
+
+	return fileName
+
 
 
 @module.handles_action('hello_world')
