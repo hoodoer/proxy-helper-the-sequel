@@ -13,7 +13,13 @@ module = Module('ProxyHelper2', logging.DEBUG)
 
 @module.handles_action('routingToggle')
 def routingToggle(request: Request):
-	return 'Something'
+	isChecked = request.toggleValue
+
+	if isChecked:
+		return 'Oh boy!'
+	else:
+		return 'nope'
+
 
 @module.handles_action('hello_world')
 def hello_world(request: Request):
