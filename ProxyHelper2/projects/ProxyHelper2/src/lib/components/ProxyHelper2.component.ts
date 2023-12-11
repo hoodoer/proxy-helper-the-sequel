@@ -45,11 +45,13 @@ export class ProxyHelper2Component implements OnInit {
         }, (response) => {
             this.apiResponse = response;
             console.log("Save firewall got response: " + response);
+            console.log("Save firewall error response: " + JSON.stringify(response))
             this.backups.push(response);
         })
     }
 
     deleteBackup(backup: string): void {
+        console.log("Should delete backup: " + backup)
         this.backups = this.backups.filter(i => i !== backup);
     }
 

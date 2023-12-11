@@ -2,6 +2,7 @@
 
 import logging
 import os
+import subprocess
 import pathlib
 from datetime import datetime
 
@@ -23,29 +24,26 @@ def routingToggle(request: Request):
 
 @module.handles_action('backupFirewall')
 def backupFirewall(request: Request):
-	current_time = datetime.now()
+	current_time   = datetime.now()
 	formatted_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
-	fileName = 'iptables_' + formatted_time;
+	fileName       = 'iptables_' + formatted_time;
 
 	# save the stuffs....
+	backupDir     = "./iptablesBackups"
+	backupPath    = os.path.join(backupDir, fileName)
+	backupCommand = ["iptables-save"]
 
+	if not os.path.exists(backupDir):
+		os.makedirs(backupDir)
+
+
+	with open(backupPath, 'w') as backupFile:
+		subprocess.run(backupCommand, stdout = backupFile, check=True)
+	# result = subprocess.run(backupCommand, check=True, shell=True)
 
 	return fileName
 
 
-
-@module.handles_action('hello_world')
-def hello_world(request: Request):
-	return 'Hello World'
-
-
-	# toggleSwitch = request.value
-
-	# if toggleSwitch:
-	# 	return 'Routing Enabled'
-
-	# if not toggleSwitch:
-	# 	return 'Routing Disabled'
 
 
 

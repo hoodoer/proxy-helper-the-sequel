@@ -1,14 +1,14 @@
-# WiFi Pineapple Mark 7 Modules 
+# ProxyHelper2
 
-This repository contains modules for the WiFi Pineapple Mark 7. All the community developed modules are here, and developers should create pull requests for any changes to modules, and to submit new modules.
+Proxy Helper is a WiFi Pineapple module that will automatically configure the Pineapple for IP forwarding and set up the necessary rules. This allows the user to easily forward web traffic to a proxy such as Burp Suite for inspection.
 
-## Contributing
-Once you have developed your module idea, you are encouraged to contribute to this repository by submitting a Pull Request with your module!
+This is a re-implementation of https://github.com/trustedsec/proxy_helper to work on newer hak5 pineapples. 
 
-Reviewed and Approved pull requests will add your module to the WiFi Pineapple's module download site, where they will be able to be downloaded directly from the WiFi Pineapple management interface.
+iptable backups are stored in:
+/pineapple/iptablesBackups
 
-## Documentation
 
-Documentation for developing WiFi Pineapple modules can be found on the [developer docs](https://hak5.github.io/mk7-docs) website. It includes an
-[introductory guide](https://hak5.github.io/mk7-docs/docs/modules/modules/).
 
+
+@hoodoer<br>
+hoodoer@bitwisemunitions.dev
