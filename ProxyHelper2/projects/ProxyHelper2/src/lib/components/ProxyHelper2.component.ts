@@ -53,11 +53,22 @@ export class ProxyHelper2Component implements OnInit {
     deleteBackup(backup: string): void {
         console.log("Should delete backup: " + backup)
         this.backups = this.backups.filter(i => i !== backup);
+
+
     }
 
 
     restoreBackup(backup: string): void {
         console.log("Would restore firewall backup: " + backup);
+
+        this.API.request({
+            module: 'ProxyHelper2',
+            action: 'restoreFirewall',
+            filename: backup
+        }, (response) => {
+            console.log("Restore response: " + response)
+        })
+
     }
 
 

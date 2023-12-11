@@ -22,6 +22,8 @@ def routingToggle(request: Request):
 	else:
 		return 'nope'
 
+
+
 @module.handles_action('backupFirewall')
 def backupFirewall(request: Request):
 	current_time   = datetime.now()
@@ -44,6 +46,22 @@ def backupFirewall(request: Request):
 	return fileName
 
 
+@module.handles_action('restoreFirewall')
+def restoreFirewall(request: Request):
+	fileName    = request.filename
+	backupDir   = "./iptablesBackups"
+	restorePath = os.path.join(backupDir, fileName)
+
+	restoreCommand = ["iptables-restore", "<", restorePath]
+
+	try:
+		subprocess.run(" ".join(restoreCommand), shell=True, check=True)
+		return "restorePath!"
+	except:
+		return "Nooooo! restore failed"
+
+
+	return restorePath
 
 
 
