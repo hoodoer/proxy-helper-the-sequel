@@ -32,6 +32,12 @@ export class ProxyHelper2Component implements OnInit {
     backups: string[] = [];
 
 
+    getSelectedPorts(): string[] {
+        return this.ports.filter(port => port.checked).map(port => port.value);
+    }
+
+
+
     saveFirewallRules(): void {
         this.API.request({
             module: 'ProxyHelper2',
@@ -57,7 +63,7 @@ export class ProxyHelper2Component implements OnInit {
     addNewPort(): void {
         if (this.newPort && !this.ports.some(port => port.value === this.newPort)) {
           this.ports.push({ value: this.newPort, checked: false });
-      this.newPort = ''; // Clear the input field after adding a new port
+          this.newPort = ''; // Clear the input field after adding a new port
   }
 }
 
@@ -65,6 +71,10 @@ routingToggle(): void {
     console.log("Routing toggle changed: " + this.isChecked);
 
     console.log("About to proxy route: " + this.proxyIpAddress + ': ' + this.proxyPort);
+
+    var activePorts = this.getSelectedPorts()
+
+    console.log("Ports to forward: " + activePorts);
 
     this.API.request({
         module: 'ProxyHelper2',
@@ -76,10 +86,6 @@ routingToggle(): void {
     })
 }
 
-
-getSelectedPorts(): string[] {
-    return this.ports.filter(port => port.checked).map(port => port.value);
-}
 
 
 ngOnInit() {
