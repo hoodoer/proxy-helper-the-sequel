@@ -13,7 +13,7 @@ from pineapple.modules import Module, Request
 module = Module('ProxyHelper2', logging.DEBUG)
 
 
-
+# This handles the actual forwarding enable/disable
 @module.handles_action('routingToggle')
 def routingToggle(request: Request):
 	isChecked = request.toggleValue
@@ -22,12 +22,26 @@ def routingToggle(request: Request):
 	proxyPort = request.proxyPort
 
 	if isChecked:
-		# Let's do this:
+		# Let's enable our forwarding
+		subprocess.run(["echo", "'1'", ">", "/proc/sys/net/ipv4/ip_forward"], shell=False, check=False)
 
-		return 'Oh boy!'
+		for port in ports:
+			burpSpot = proxyIP + ":" + proxyPort
+			command = ["iptables", "-t", "nat", "-A", "PREROUTING", "-p", "tcp", "--dport", str(port), "-j", "DNAT", "--to-destination", burpSpot]
+			subprocess.run(command, shell=False, check=False)
+
+		result = subprocess.run(["iptables", "-t", "nat", "-A", "POSTROUTING", "-j", "MASQUERADE"], capture_output=True, text=True, shell=False, check=False)
+
+		return "Forwarding enabled."
 	else:
-		# Turn off forwarding
-		return 'nope'
+		# Turn off forwarding/ clear things
+
+		for port in ports:
+			burpSpot = proxyIP + ":" + proxyPort
+			command = ["iptables", "-t", "nat", "-D", "PREROUTING", "-p", "tcp", "--dport", str(port), "-j", "DNAT", "--to-destination", burpSpot]
+			subprocess.run(command, shell=False, check=False)
+
+		return 'Forwarding cleared.'
 
 
 
@@ -66,7 +80,7 @@ def deleteBackup(request: Request):
 
 	try:
 		subprocess.run(" ".join(deleteCommand), shell=True, check=True)
-		return "delete command: " + deleteCommand
+		return "Delete backup succeeded: " + backupFile
 	except:
 		return "Delete backup failed!" + deleteCommand
 
@@ -83,7 +97,7 @@ def restoreFirewall(request: Request):
 
 	try:
 		subprocess.run(" ".join(restoreCommand), shell=True, check=True)
-		return "restorePath!"
+		return "Restore succeeded: " + fileName
 	except:
 		return "Firewall restore failed!"
 
@@ -96,7 +110,13 @@ def getBackups(request: Request):
 
 	backupFiles = os.listdir(backupDir)
 
-	return backupFiles
+	fileTimes = [(file, os.path.getmtime(os.path.join(backupDir, file))) for file in backupFiles]
+
+	sortedBackupFiles = sorted(fileTimes, key=lambda x: x[1])
+
+	cleanedBackupFiles = [filename[0] for filename in sortedBackupFiles]
+
+	return cleanedBackupFiles
 
 
 if __name__ == '__main__':

@@ -2,6 +2,7 @@ import { Component, OnInit, ViewEncapsulation, ViewChild } from '@angular/core';
 import { ApiService } from '../services/api.service';
 import { MatListModule } from '@angular/material/list';
 import { MatSelectionList } from '@angular/material/list';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 // import { FormControl, FormGroup, Validators, ReactiveFormsModule, FormBuilder } from '@angular/forms';
 
 @Component({
@@ -16,10 +17,12 @@ export class ProxyHelper2Component implements OnInit {
     constructor(private API: ApiService) { }
     @ViewChild('portForwardList') portForwardList: MatSelectionList;
 
+    backendLoaded  = false;
     isChecked      = false;
     apiResponse    = 'Press the button to get response.';
     proxyIpAddress = '';
     proxyPort      = '';
+
 
 
     ports = [
@@ -92,7 +95,7 @@ export class ProxyHelper2Component implements OnInit {
             for (var i = 0; i < response.length; i++) {
                 this.backups.push(response[i]);
             }
-
+            this.backendLoaded = true;
         })
         
     }
@@ -131,6 +134,7 @@ export class ProxyHelper2Component implements OnInit {
         }, (response) => {
             this.apiResponse = response;
             console.log("Toggle: " + response);
+            console.log("details: " + JSON.stringify(response));
         })
     }
 
