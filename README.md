@@ -8,7 +8,13 @@ iptable backups are stored in:
 /pineapple/iptablesBackups
 
 
+## Install
+Download the module:<br>
+[ProxyHelper2.tar.bz2](https://github.com/hoodoer/proxy-helper-the-sequel/releases/download/v1.0/ProxyHelper2.tar.bz2) <br>
+And uncompress on your pineapple in /pineapple/modules
 
 
+
+<br><br>
 @hoodoer<br>
 hoodoer@bitwisemunitions.dev
