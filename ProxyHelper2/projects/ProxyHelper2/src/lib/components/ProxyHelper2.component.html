@@ -23,14 +23,13 @@
             <button mat-flat-button color="accent" (click)="restoreBackup(backup)">Restore</button>
         </li>
     </ul>       
-
 </mat-card-content>
 </mat-card>
 
 
 <mat-card>
     <mat-card-content>
-        <b>Ports to forward to Burp Proxy:</b><br><br>
+        <b>TCP Ports to forward to Burp Proxy:</b><br><br>
         <div *ngFor="let port of ports">
           <mat-checkbox [(ngModel)]="port.checked">{{ port.value }}</mat-checkbox>
       </div> 

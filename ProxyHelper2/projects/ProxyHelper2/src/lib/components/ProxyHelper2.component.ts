@@ -32,9 +32,6 @@ export class ProxyHelper2Component implements OnInit {
     backups: string[] = [];
 
 
-    getSelectedPorts(): string[] {
-        return this.ports.filter(port => port.checked).map(port => port.value);
-    }
 
 
 
@@ -50,11 +47,20 @@ export class ProxyHelper2Component implements OnInit {
         })
     }
 
+
+
     deleteBackup(backup: string): void {
         console.log("Should delete backup: " + backup)
         this.backups = this.backups.filter(i => i !== backup);
 
 
+        this.API.request({
+            module: 'ProxyHelper2',
+            action: 'deleteBackup',
+            backupFile: backup
+        }, (response) => {
+            console.log('Delete backup response: ' + response)
+        });
     }
 
 
@@ -66,43 +72,73 @@ export class ProxyHelper2Component implements OnInit {
             action: 'restoreFirewall',
             filename: backup
         }, (response) => {
-            console.log("Restore response: " + response)
+            console.log("Restore response: " + response);
         })
 
     }
 
+
+    getBackups(): void {
+        console.log("Fetching list of backups on disk...");
+
+        this.API.request({
+            module: 'ProxyHelper2',
+            action: 'getBackups'
+        }, (response) => {
+            console.log("Get backups response: " + response);  
+            console.log(JSON.stringify(response));
+            this.backups.length = 0;
+
+            for (var i = 0; i < response.length; i++) {
+                this.backups.push(response[i]);
+            }
+
+        })
+        
+    }
 
 
     addNewPort(): void {
         if (this.newPort && !this.ports.some(port => port.value === this.newPort)) {
           this.ports.push({ value: this.newPort, checked: false });
           this.newPort = ''; // Clear the input field after adding a new port
+      }
   }
-}
 
-routingToggle(): void {
-    console.log("Routing toggle changed: " + this.isChecked);
 
-    console.log("About to proxy route: " + this.proxyIpAddress + ': ' + this.proxyPort);
-
-    var activePorts = this.getSelectedPorts()
-
-    console.log("Ports to forward: " + activePorts);
-
-    this.API.request({
-        module: 'ProxyHelper2',
-        action: 'routingToggle',
-        toggleValue: this.isChecked
-    }, (response) => {
-        this.apiResponse = response;
-        console.log("Toggle: " + response);
-    })
-}
+  getSelectedPorts(): string[] {
+    return this.ports.filter(port => port.checked).map(port => port.value);
+    }
 
 
 
-ngOnInit() {
-}
+    routingToggle(): void {
+        console.log("Routing toggle changed: " + this.isChecked);
+
+        console.log("About to proxy route: " + this.proxyIpAddress + ': ' + this.proxyPort);
+
+        var activePorts = this.getSelectedPorts()
+
+        console.log("Ports to forward: " + activePorts);
+
+        this.API.request({
+            module: 'ProxyHelper2',
+            action: 'routingToggle',
+            toggleValue: this.isChecked,
+            forwardPorts: activePorts,
+            proxyHost: this.proxyIpAddress,
+            proxyPort: this.proxyPort
+        }, (response) => {
+            this.apiResponse = response;
+            console.log("Toggle: " + response);
+        })
+    }
+
+
+
+    ngOnInit() {
+        this.getBackups();
+    }
 
 
 }
